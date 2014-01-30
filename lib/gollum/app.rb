@@ -5,6 +5,7 @@ require 'gollum-lib'
 require 'mustache/sinatra'
 require 'useragent'
 require 'stringex'
+require 'sinatra_auth_github'
 
 require 'gollum'
 require 'gollum/views/layout'
@@ -40,6 +41,15 @@ end
 # See the wiki.rb file for more details on wiki options
 module Precious
   class App < Sinatra::Base
+    enable :sessions
+
+    set :github_options, {
+      :scopes    => "user",
+      :secret    => ENV['GITHUB_CLIENT_SECRET'],
+      :client_id => ENV['GITHUB_CLIENT_ID'],
+    }
+
+    register Sinatra::Auth::Github
     register Mustache::Sinatra
     include Precious::Helpers
 
@@ -91,6 +101,10 @@ module Precious
       settings.wiki_options.merge!({ :base_path => @base_url })
       @css = settings.wiki_options[:css]
       @js = settings.wiki_options[:js]
+    end
+
+    before '/*' do
+      github_organization_authenticate!(ENV['GITHUB_ORG'])
     end
 
     get '/' do
