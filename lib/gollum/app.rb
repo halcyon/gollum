@@ -105,6 +105,7 @@ module Precious
 
     before '/*' do
       github_organization_authenticate!(ENV['GITHUB_ORG'])
+      github_team_authenticate!(ENV['GITHUB_TEAM_ID'])
     end
 
     get '/' do
