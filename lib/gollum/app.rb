@@ -507,7 +507,8 @@ module Precious
     # author details are sourced from the session, to be populated by rack middleware ahead of us
     def commit_message
       msg = (params[:message].nil? or params[:message].empty?) ? "[no message]" : params[:message]
-      commit_message = { :message => msg }
+      author = (github_user.name.nil? or github_user.name.empty?) ? github_user.login : github_user.name
+      commit_message = { :message => msg, :name => author, :email => github_user.email }
       author_parameters = session['gollum.author']
       commit_message.merge! author_parameters unless author_parameters.nil?
       commit_message
