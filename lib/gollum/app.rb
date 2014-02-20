@@ -103,10 +103,21 @@ module Precious
       @js = settings.wiki_options[:js]
     end
 
-    before '/*' do
-      github_organization_authenticate!(ENV['GITHUB_ORG'])
-      github_team_authenticate!(ENV['GITHUB_TEAM_ID'])
-    end
+    protected_routes = [  
+      '/revert/*',
+      '/revert',
+      '/create/*',
+      '/create',
+      '/edit/*',
+      '/edit',
+      '/rename/*',
+      '/rename/',
+      '/upload/*',
+      '/upload/',
+      '/delete/*',
+      '/delete']
+
+    protected_routes.each { |route| before(route) { authenticate! }}
 
     get '/' do
       page_dir = settings.wiki_options[:page_file_dir].to_s
