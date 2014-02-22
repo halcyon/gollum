@@ -112,8 +112,7 @@ module Precious
       '/edit',
       '/rename/*',
       '/rename/',
-      '/upload/*',
-      '/upload/',
+      '/uploadFile',
       '/delete/*',
       '/delete']
 
