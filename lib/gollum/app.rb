@@ -117,7 +117,7 @@ module Precious
       '/delete/*',
       '/delete']
 
-    protected_routes.each { |route| before(route) { authenticate! }}
+    protected_routes.each { |route| before(route) { github_team_authenticate!(ENV['GITHUB_TEAM_ID']) }}
 
     get '/' do
       page_dir = settings.wiki_options[:page_file_dir].to_s
